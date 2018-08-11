@@ -12,11 +12,27 @@ import {
 import demo from './demo.json';
 import ListItem from './components/listItem';
 
+const SortableItem = SortableElement(({ value }) => (
+  <Col md={3}>
+    {value.title}
+  </Col>
+));
+
+const SortableList = SortableContainer(({ items }) => (
+  <Row>
+    {items.map((value, index) => (
+      <SortableItem key={`item-${index}`} index={index} value={value} />
+    ))}
+  </Row>
+));
+
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       json: null,
+      items: demo[0].children,
     };
   }
 
@@ -28,35 +44,16 @@ class App extends Component {
     // });
   }
 
-  list() {
-    const SortableItem = SortableElement(({ value }) => (
-      <ul>
-        {value.title}
-      </ul>
-    ));
-    const SortableList = SortableContainer(({ items }) => this.state.json[0].children.map((index, value) => (
-      <Col md={3}>
-        <SortableItem key={`item-${index}`} index={index} value={value} />
-      </Col>
-    )));
-
-    return (
-      <Row>
-        <SortableList items={this.state.json} onSortEnd={this.onSortEnd} />
-      </Row>
-    );
-  }
-
-  onSortEnd({ oldIndex, newIndex }) {
+  onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
-      items: arrayMove(this.state.json, oldIndex, newIndex),
-    });
-  }
+      items: arrayMove(this.state.items, oldIndex, newIndex),
+    }, () => {console.log(this.state.items)} );
+  };
 
-  render() {
+  render() {    
     return (
       <Container>
-        {this.list()}
+          <SortableList axis="xy" items={this.state.items} onSortEnd={this.onSortEnd} />
       </Container>
     );
   }
