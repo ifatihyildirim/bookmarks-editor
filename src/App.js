@@ -11,8 +11,8 @@ import {
   arrayMove,
 } from 'react-sortable-hoc';
 
-import demo from './demo.json';
 import ListItem from './components/listItem';
+import Navbar from './components/navbar';
 
 const SortableItem = SortableElement(({ value }) => (
   <ListItem {...value} />
@@ -44,7 +44,7 @@ class App extends Component {
 
   componentWillMount() {
     chrome.bookmarks.getTree((itemTree) => {
-      this.setState({ items: itemTree[0].children });
+      this.setState({ items: itemTree[0].children[0].children });
     });
   }
 
@@ -82,14 +82,21 @@ class App extends Component {
 
   render() {
     return (
-      <Container>
-        <SortableList
-          axis="xy"
-          items={this.state.items}
-          onItemFolderPress={this.onItemFolderPress}
-          goToUrl={this.goToUrl}
-          onSortEnd={this.onSortEnd}
-        />
+      <Container fluid>
+        <Row>
+          <Col className="col-md-auto">
+            <Navbar />
+          </Col>
+          <Col>
+            <SortableList
+              axis="xy"
+              items={this.state.items}
+              onItemFolderPress={this.onItemFolderPress}
+              goToUrl={this.goToUrl}
+              onSortEnd={this.onSortEnd}
+            />
+          </Col>
+        </Row>
       </Container>
     );
   }
