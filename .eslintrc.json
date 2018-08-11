@@ -3,6 +3,7 @@
     "parser": "babel-eslint",
     "rules": {
         "react/jsx-filename-extension": 0,
-        "react/destructuring-assignment": 0
+        "react/destructuring-assignment": 0,
+        "react/no-array-index-key": 0
     }
 }
