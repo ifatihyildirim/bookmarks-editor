@@ -1,8 +1,10 @@
-/* global chrome */
+/* global chrome, console */
 
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col } from 'reactstrap';
+import {
+  Container, Row, Col,
+} from 'reactstrap';
 import {
   SortableContainer,
   SortableElement,
@@ -13,8 +15,8 @@ import demo from './demo.json';
 import ListItem from './components/listItem';
 
 const SortableItem = SortableElement(({ value }) => (
-  <Col md={3}>
-    {value.title}
+  <Col className="p-2" md={3}>
+    <ListItem {...value} />
   </Col>
 ));
 
@@ -31,29 +33,26 @@ class App extends Component {
     super(props);
 
     this.state = {
-      json: null,
       items: demo[0].children,
     };
   }
 
   componentWillMount() {
-    this.setState({ json: demo });
-
     // chrome.bookmarks.getTree((itemTree) => {
     //   this.setState({json: itemTree[0].children})
     // });
   }
 
-  onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState({
-      items: arrayMove(this.state.items, oldIndex, newIndex),
-    }, () => {console.log(this.state.items)} );
+  onSortEnd = () => ({ oldIndex, newIndex }) => {
+    this.setState(prevState => ({
+      items: arrayMove(prevState.items, oldIndex, newIndex),
+    }));
   };
 
-  render() {    
+  render() {
     return (
       <Container>
-          <SortableList axis="xy" items={this.state.items} onSortEnd={this.onSortEnd} />
+        <SortableList axis="xy" items={this.state.items} onSortEnd={this.onSortEnd} />
       </Container>
     );
   }
