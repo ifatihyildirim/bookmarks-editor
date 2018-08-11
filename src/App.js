@@ -22,11 +22,12 @@ const SortableList = SortableContainer(({ items, onItemFolderPress, goToUrl }) =
   <Row>
     {items.map((value, index) => (
       <Col
+        key={`item-${index}`}
         className="p-2"
-        md={3}
+        md={2}
         onClick={('children' in value) ? onItemFolderPress(index) : goToUrl(value.url)}
       >
-        <SortableItem key={`item-${index}`} index={index} value={value} />
+        <SortableItem index={index} value={value} />
       </Col>
     ))}
   </Row>
