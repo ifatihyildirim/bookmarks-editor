@@ -3,10 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Card, CardImg, CardBody, CardTitle, CardSubtitle,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 
-const App = (props) => {
-  const { title, url, img } = props;
+const ListItem = (props) => {
+  const { title, url } = props;
 
   return (
     <Card>
@@ -15,6 +16,7 @@ const App = (props) => {
         <CardTitle>
           {title}
         </CardTitle>
+        {url && (
         <CardSubtitle>
           <small className="text-muted">
             <a target="_blank" rel="noopener noreferrer" href={url}>
@@ -22,9 +24,19 @@ const App = (props) => {
             </a>
           </small>
         </CardSubtitle>
+        )}
       </CardBody>
     </Card>
   );
 };
 
-export default App;
+ListItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string,
+};
+
+ListItem.defaultProps = {
+  url: '',
+};
+
+export default ListItem;
