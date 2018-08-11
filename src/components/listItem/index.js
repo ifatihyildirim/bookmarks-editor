@@ -4,17 +4,19 @@ import {
   Card, CardImg, CardBody, CardTitle, CardSubtitle,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-
+import Dropdown from '../dropdown';
 
 const ListItem = (props) => {
   const { title, url } = props;
-
   return (
     <Card>
       <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
-      <CardBody>
-        <CardTitle>
-          {title}
+      <CardBody className="p-3">
+        <CardTitle className="d-flex justify-content-between">
+          <h6>
+            {title}
+          </h6>
+          <Dropdown />
         </CardTitle>
         {url && (
         <CardSubtitle>
