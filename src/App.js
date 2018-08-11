@@ -1,4 +1,4 @@
-/* global chrome */
+/* global chrome, window */
 
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,17 +11,21 @@ import {
   arrayMove,
 } from 'react-sortable-hoc';
 
-// import demo from './demo.json';
+import demo from './demo.json';
 import ListItem from './components/listItem';
 
 const SortableItem = SortableElement(({ value }) => (
   <ListItem {...value} />
 ));
 
-const SortableList = SortableContainer(({ items, handleClick }) => (
+const SortableList = SortableContainer(({ items, onItemFolderPress, goToUrl }) => (
   <Row>
     {items.map((value, index) => (
-      <Col className="p-2" md={3} onClick={handleClick(index)}>
+      <Col
+        className="p-2"
+        md={3}
+        onClick={('children' in value) ? onItemFolderPress(index) : goToUrl(value.url)}
+      >
         <SortableItem key={`item-${index}`} index={index} value={value} />
       </Col>
     ))}
@@ -43,7 +47,7 @@ class App extends Component {
     });
   }
 
-  onitemFolderPress = index => () => {
+  onItemFolderPress = index => () => {
     this.setState(prevState => ({ items: prevState.items[index].children }));
   }
 
@@ -52,6 +56,10 @@ class App extends Component {
       items: arrayMove(prevState.items, oldIndex, newIndex),
     }), this.changeIndexes(oldIndex, newIndex));
   };
+
+  goToUrl = url => () => {
+    window.location = url;
+  }
 
   changeIndexes = (oldIndex, newIndex) => () => {
     let initial = null;
@@ -74,7 +82,13 @@ class App extends Component {
   render() {
     return (
       <Container>
-        <SortableList axis="xy" items={this.state.items} handleClick={this.onitemFolderPress} onSortEnd={this.onSortEnd} />
+        <SortableList
+          axis="xy"
+          items={this.state.items}
+          onItemFolderPress={this.onItemFolderPress}
+          goToUrl={this.goToUrl}
+          onSortEnd={this.onSortEnd}
+        />
       </Container>
     );
   }
