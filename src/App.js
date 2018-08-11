@@ -15,15 +15,15 @@ import {
 import ListItem from './components/listItem';
 
 const SortableItem = SortableElement(({ value }) => (
-  <Col className="p-2" md={3}>
-    <ListItem {...value} />
-  </Col>
+  <ListItem {...value} />
 ));
 
-const SortableList = SortableContainer(({ items }) => (
+const SortableList = SortableContainer(({ items, handleClick }) => (
   <Row>
     {items.map((value, index) => (
-      <SortableItem key={`item-${index}`} index={index} value={value} />
+      <Col className="p-2" md={3} onClick={handleClick(index)}>
+        <SortableItem key={`item-${index}`} index={index} value={value} />
+      </Col>
     ))}
   </Row>
 ));
@@ -41,8 +41,10 @@ class App extends Component {
     chrome.bookmarks.getTree((itemTree) => {
       this.setState({ items: itemTree[0].children });
     });
+  }
 
-    // this.setState({ items: demo[0].children });
+  onitemFolderPress = index => () => {
+    this.setState(prevState => ({ items: prevState.items[index].children }));
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
@@ -72,7 +74,7 @@ class App extends Component {
   render() {
     return (
       <Container>
-        <SortableList axis="xy" items={this.state.items} onSortEnd={this.onSortEnd} />
+        <SortableList axis="xy" items={this.state.items} handleClick={this.onitemFolderPress} onSortEnd={this.onSortEnd} />
       </Container>
     );
   }
